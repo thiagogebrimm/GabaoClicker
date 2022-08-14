@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.intellij:forms_rt:7.0.3'
+    implementation 'com.github.kwhat:jnativehook:2.2.2'
+}
+
+sourceSets {
+    main {
+         java {
+            srcDirs = ['src']
+         }
+    }
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "me.thiagogebrim.gabaoclicker.Start")
+    }
+    from {
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = '1.8'
+//noinspection GroovyUnusedAssignment
+targetCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
