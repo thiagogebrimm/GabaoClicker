@@ -1,38 +1,56 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
 }
+
+apply plugin: "java"
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = project_Group
+version = project_Version
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://repo1.maven.org/maven2/'
+        metadataSources {
+             artifact() //Look directly for artifact
+        }
+    }
 }
 
 dependencies {
-    implementation 'com.intellij:forms_rt:7.0.3'
+    implementation 'org.pushing-pixels:trident:1.2'
     implementation 'com.github.kwhat:jnativehook:2.2.2'
+    implementation 'com.apple:AppleJavaExtensions:1.4'
 }
 
-sourceSets {
-    main {
-         java {
-            srcDirs = ['src']
-         }
+shadowJar {
+    archiveFileName.set("Gabao Clicker ${project.version}.jar")
+
+    dependencies {
+        include(dependency('org.pushing-pixels:trident:1.2'))
+        include(dependency('com.github.kwhat:jnativehook:2.2.2'))
+        include(dependency('com.apple:AppleJavaExtensions:1.4'))
     }
 }
 
 jar {
     manifest {
-        attributes("Main-Class": "me.thiagogebrim.gabaoclicker.Start")
-    }
-    from {
-        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+       attributes(
+                "Manifest-Version": 1.0,
+                "Main-Class": "me.thiagogebrim.gabaoclicker.AutoClicker"
+        )
     }
 }
 
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = '1.8'
-//noinspection GroovyUnusedAssignment
-targetCompatibility = '1.8'
-
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
+build.dependsOn(shadowJar)
