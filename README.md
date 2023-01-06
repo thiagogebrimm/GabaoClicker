@@ -1,13 +1,13 @@
 GabãoClicker
 ==========
 
-OBS: Você pode usar ele como um medidor de CPS, basta deixa-lo aberto e posicionar na posição de sua preferência.
+OBS: Você pode usar ele como um medidor de CPS, basta deixa-lo aberto e posicionar na posição da sua preferência.
 
 Requisitos para rodar
 ------------
-- Java 8.0
+- [Java a partir do 8.0](https://www.oracle.com/java/technologies/downloads/)
 - Linux, Mac OS X, Windows
-- 4MB
+- 250MB
 
 Motivo para a criação
 ----------------------------------------------------
