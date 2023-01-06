@@ -4,7 +4,7 @@ buildscript {
         maven { url = 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        classpath 'gradle.plugin.com.github.johnrengelman:shadow:7.1.2'
     }
 }
 
@@ -18,9 +18,7 @@ repositories {
     mavenCentral()
     maven {
         url 'https://repo1.maven.org/maven2/'
-        metadataSources {
-             artifact() //Look directly for artifact
-        }
+        metadataSources.artifact()
     }
 }
 
@@ -32,12 +30,6 @@ dependencies {
 
 shadowJar {
     archiveFileName.set("Gabao Clicker ${project.version}.jar")
-
-    dependencies {
-        include(dependency('org.pushing-pixels:trident:1.2'))
-        include(dependency('com.github.kwhat:jnativehook:2.2.2'))
-        include(dependency('com.apple:AppleJavaExtensions:1.4'))
-    }
 }
 
 jar {
@@ -53,4 +45,4 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-build.dependsOn(shadowJar)
+shadowJar.dependsOn
