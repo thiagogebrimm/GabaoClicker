@@ -1,7 +1,8 @@
 package me.thiagogebrim.gabaoclicker.listener;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
@@ -10,24 +11,22 @@ import me.thiagogebrim.gabaoclicker.AutoClicker;
 
 public class KeyListener implements NativeKeyListener {
 
-	@Override
-	public void nativeKeyPressed(NativeKeyEvent event) {
-		List<String> modifiers1 = Arrays.asList(NativeKeyEvent.getModifiersText(event.getModifiers()).split("\\+"));
-		List<String> modifiers2 = Arrays.asList(AutoClicker.toggleKey[1].split("\\+"));
+    // Cache dos modificadores de teclas para evitar a criação repetida de objetos
+    private final Set<String> cachedToggleKeyModifiers = new HashSet<>(
+            Arrays.asList(AutoClicker.toggleKey[1].split("\\+"))
+    );
 
-		if (NativeKeyEvent.getKeyText(event.getKeyCode()).equals(AutoClicker.toggleKey[0])
-				&& modifiers1.containsAll(modifiers2) && !AutoClicker.gui.focused) {
-			AutoClicker.toggle();
-		}
-	}
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent event) {
+        String currentKeyText = NativeKeyEvent.getKeyText(event.getKeyCode());
+        Set<String> currentKeyModifiers = new HashSet<>(
+                Arrays.asList(NativeKeyEvent.getModifiersText(event.getModifiers()).split("\\+"))
+        );
 
-	@Override
-	public void nativeKeyReleased(NativeKeyEvent event) {
-		// NO-OP
-	}
-
-	@Override
-	public void nativeKeyTyped(NativeKeyEvent event) {
-		// NO-OP
-	}
+        if (currentKeyText.equals(AutoClicker.toggleKey[0])
+                && currentKeyModifiers.containsAll(cachedToggleKeyModifiers)
+                && !AutoClicker.gui.focused) {
+            AutoClicker.toggle();
+        }
+    }
 }
